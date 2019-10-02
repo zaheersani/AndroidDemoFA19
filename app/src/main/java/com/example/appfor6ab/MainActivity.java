@@ -24,6 +24,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         this._btnSave = findViewById(R.id.btnSave);
 
+        Log.i("Msg", "I am creating!");
+
+        if(savedInstanceState != null) {
+            this._currectQuestion = savedInstanceState.getInt("index", 0);
+        }
+
         this._btnSave.setText("Login");
 
 //        this._btnSave.setOnClickListener(new View.OnClickListener() {
@@ -43,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         this._questionStatement = findViewById(R.id.textQuestion);
         this._questionStatement.setText(
-                this._questions.get(0).getQuestionText()
+                this._questions.get(this._currectQuestion).getQuestionText()
         );
     }
 
@@ -71,4 +77,29 @@ public class MainActivity extends AppCompatActivity {
         String q = this._questions.get(this._currectQuestion).getQuestionText();
         this._questionStatement.setText(q);
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i("Msg", "I am pausing!");
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i("Msg", "I am Resuming!");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.i("Msg", "I am Stopping!");
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle onSaveState) {
+        super.onSaveInstanceState(onSaveState);
+        Log.i("Msg", "Saving State!");
+        onSaveState.putInt("index", this._currectQuestion);
+    }
+
 }
