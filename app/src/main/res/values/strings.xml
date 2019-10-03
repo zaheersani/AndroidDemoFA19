@@ -8,4 +8,7 @@
     <string name="btnTrue">True</string>
     <string name="btnFalse">False</string>
     <string name="btnNext">Next</string>
+    <string name="textHint">You will loose half of the score if you reveal the Hint</string>
+    <string name="btnReveal">Reveal the Hint!</string>
+    <string name="btnHint">Get a Hint!</string>
 </resources>

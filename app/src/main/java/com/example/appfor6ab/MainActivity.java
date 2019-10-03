@@ -2,80 +2,68 @@ package com.example.appfor6ab;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-
-    private Button _btnSave;
+    
     private TextView _questionStatement;
-    private int _currectQuestion = 0;
+    private int _currentQuestion = 0;
     private ArrayList<Question> _questions =
             new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this._btnSave = findViewById(R.id.btnSave);
 
         Log.i("Msg", "I am creating!");
 
         if(savedInstanceState != null) {
-            this._currectQuestion = savedInstanceState.getInt("index", 0);
+            this._currentQuestion = savedInstanceState.getInt("index", 0);
         }
 
-        this._btnSave.setText("Login");
-
-//        this._btnSave.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(MainActivity.this,
-//                        "Button Clicked!",
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
         this._questions.add(
-          new Question("Class will end at 13:00", false)
+          new Question("Oslo is the capital of Denmark", false, "Telenor came from?")
         );
-        this._questions.add(new Question(getString(R.string.Q1), true));
-        this._questions.add(new Question("Paris is the capital of Germany", false));
+        this._questions.add(new Question(getString(R.string.Q1), true, "Where is Faisal Mosque?"));
+        this._questions.add(new Question("Paris is the capital of Germany", false, "Where is Eiffel Tower?"));
 
         this._questionStatement = findViewById(R.id.textQuestion);
         this._questionStatement.setText(
-                this._questions.get(this._currectQuestion).getQuestionText()
+                this._questions.get(this._currentQuestion).getQuestionText()
         );
     }
 
-    public void onButtonClick(View v) {
-        Button b = (Button)v;
-        Toast.makeText(MainActivity.this,
-                b.getText().toString(),
-                Toast.LENGTH_SHORT).show();
-    }
-
     public void onTrueFalseClick(View v) {
-        //Toast.makeText()
-        boolean correct = this._questions.get(this._currectQuestion).getCorrectAnswer();
+        boolean correct = this._questions.get(this._currentQuestion).getCorrectAnswer();
         boolean userChoice = Boolean.parseBoolean( ((Button)v).getText().toString());
         if(correct == userChoice)
             Log.i("Msg", "Answer is Correct");
         else
             Log.i("Msg", "incorrect");
-
-//        Log.i("Msg", Boolean.toString(userChoice));
     }
 
     public void onNextClick(View v) {
-        this._currectQuestion++;
-        String q = this._questions.get(this._currectQuestion).getQuestionText();
+        this._currentQuestion++;
+        String q = this._questions.get(this._currentQuestion).getQuestionText();
         this._questionStatement.setText(q);
+    }
+
+    public void onHintClick(View v) {
+        // Create Intent
+        Intent intent = new Intent(this, HintActivity.class);
+        // Get Hint Text of Current Question from Questions Collection
+        String hintOfCurrentQuestion = this._questions.get(this._currentQuestion).getHint();
+        // Add Hint text information with intent
+        intent.putExtra("hint", hintOfCurrentQuestion);
+        // Start a new activity with created Intent
+        startActivity(intent);
     }
 
     @Override
@@ -99,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
     public void onSaveInstanceState(Bundle onSaveState) {
         super.onSaveInstanceState(onSaveState);
         Log.i("Msg", "Saving State!");
-        onSaveState.putInt("index", this._currectQuestion);
+        onSaveState.putInt("index", this._currentQuestion);
     }
 
 }
